@@ -158,19 +158,21 @@ export interface Database {
         };
       };
       media: {
-        Row: {
-          id: string;
-          title: string;
-          description: string | null;
-          type: MediaType;
-          url: string;
-          thumbnail_url: string | null;
-          file_size: number | null;
-          duration: number | null;
-          uploaded_by: string;
-          post_id: string | null;
-          created_at: string;
-        };
+                    Row: {
+                  _id: string;
+                  title: string;
+                  description: string | null;
+                  type: "image" | "video" | "document";
+                  url: string;
+                  thumbnail_url: string | null;
+                  file_size: number | null;
+                  duration: number | null;
+                  uploaded_by: string;
+                  post_id: string | null;
+                  status: "pending" | "published";   // ✅ ADD THIS
+                  approved_by: string | null;         // ✅ ADD THIS
+                  created_at: string;
+                };
         Insert: {
           id?: string;
           title: string;

@@ -1,30 +1,27 @@
-import express from 'express';
-import { body } from 'express-validator';
+import express from "express";
+import { authenticate } from "../middleware/auth.js";
+// import { mediaUpload } from "../middleware/mediaupload.js";
+import { upload } from "../middleware/upload.js";
+import { deleteMedia } from "../controllers/mediaController.js";
+import { requireAdmin } from "../middleware/auth.js";
 import {
-  getAllMedia,
-  createMedia,
-  deleteMedia
-} from '../controllers/mediaController.js';
-import { authenticate, requireResearcher } from '../middleware/auth.js';
-import { validate } from '../middleware/validation.js';
+  uploadMedia,
+  getMedia,
+  approveMedia,
+} from "../controllers/mediaController.js";
 
 const router = express.Router();
 
-router.get('/', getAllMedia);
+router.get("/", getMedia);
 
 router.post(
-  '/',
+  "/upload",
   authenticate,
-  requireResearcher,
-  [
-    body('title').trim().notEmpty(),
-    body('type').isIn(['video', 'image', 'document']),
-    body('url').isURL(),
-    validate
-  ],
-  createMedia
+  requireAdmin,
+  upload.single("file"),
+  uploadMedia
 );
-
-router.delete('/:id', authenticate, requireResearcher, deleteMedia);
+router.post("/:id/approve", authenticate, approveMedia);
+router.delete("/:id", authenticate, deleteMedia);
 
 export default router;

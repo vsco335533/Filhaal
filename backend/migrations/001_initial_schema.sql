@@ -131,6 +131,10 @@ CREATE TABLE IF NOT EXISTS media (
   post_id uuid REFERENCES posts(id) ON DELETE SET NULL,
   created_at timestamptz DEFAULT now()
 );
+ALTER TABLE media
+ADD COLUMN status TEXT NOT NULL DEFAULT 'pending',
+ADD COLUMN approved_by uuid REFERENCES profiles(id);
+
 
 -- =============================================
 -- MODERATION_LOG TABLE

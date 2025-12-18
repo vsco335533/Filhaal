@@ -15,13 +15,13 @@ export function PostDetail() {
 
   const loadPost = async () => {
     try {
-      const data = await apiGet(`/api/posts/${slug}`);
+      const data = await apiGet(`/posts/${slug}`);
 
       if (data) {
         setPost(data);
 
         // Increase view count
-        apiPost(`/api/posts/${data.id}/view`, {});
+        apiPost(`/posts/${data.id}/view`, {});
       }
     } catch (error) {
       console.error("Error loading post:", error);

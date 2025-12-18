@@ -17,9 +17,16 @@ export const getAllPosts = async (req, res) => {
     const queryParams = [];
     let paramIndex = 1;
 
+    // if (status) {
+    //   queryText += ` AND p.status = $${paramIndex}`;
+    //   queryParams.push(status);
+    //   paramIndex++;
+    // }
+
     if (status) {
-      queryText += ` AND p.status = $${paramIndex}`;
-      queryParams.push(status);
+      const statuses = status.split(",");
+      queryText += ` AND p.status = ANY($${paramIndex})`;
+      queryParams.push(statuses);
       paramIndex++;
     }
 

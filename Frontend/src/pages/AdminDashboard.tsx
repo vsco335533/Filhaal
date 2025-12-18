@@ -14,10 +14,13 @@ export function AdminDashboard() {
     loadData();
   }, []);
 
+  
+
   const loadData = async () => {
     try {
-      const postsData = await apiGet("/api/posts");
-      const researchersData = await apiGet("/api/users?role=researcher");
+      const postsData = await apiGet("/posts?status=submitted,under_review");
+      const researchersData = await apiGet("/users?role=researcher");
+   
 
       setPosts(postsData || []);
       setResearchers(researchersData || []);
@@ -30,7 +33,9 @@ export function AdminDashboard() {
 
   const handleApprovePost = async (postId: string) => {
     try {
-      await apiPost(`/api/posts/${postId}/approve`, {});
+      await apiPost(`/posts/${postId}/approve`, {});
+      
+        
       loadData();
     } catch (error) {
       console.error("Error approving post:", error);
@@ -43,7 +48,7 @@ export function AdminDashboard() {
     if (!feedback) return;
 
     try {
-      await apiPost(`/api/posts/${postId}/reject`, { feedback });
+      await apiPost(`/posts/${postId}/reject`, { feedback });
       loadData();
     } catch (error) {
       console.error("Error rejecting post:", error);
@@ -60,6 +65,9 @@ export function AdminDashboard() {
     totalResearchers: researchers.length,
     totalViews: posts.reduce((sum, p) => sum + (p.view_count || 0), 0),
   };
+
+ 
+
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -153,8 +161,8 @@ export function AdminDashboard() {
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-600 mx-auto"></div>
             </div>
           ) : posts.filter((p) =>
-              ["submitted", "under_review"].includes(p.status)
-            ).length === 0 ? (
+                  ["submitted", "under_review"].includes(p.status)
+                ).length === 0 ? (
             <div className="p-8 text-center text-gray-500">
               No posts pending approval
             </div>
@@ -187,9 +195,13 @@ export function AdminDashboard() {
                       <td className="px-6 py-4">
                         <div className="text-sm font-medium text-gray-900">
                           {post.title}
+
+                            <p className="text-xs text-gray-500">Status: {post.status}</p>
                         </div>
                         <div className="text-xs text-gray-500">
                           {new Date(post.created_at).toLocaleDateString()}
+                          
+
                         </div>
                       </td>
 
@@ -210,24 +222,27 @@ export function AdminDashboard() {
                       </td>
 
                       <td className="px-6 py-4 whitespace-nowrap text-sm">
-                        <div className="flex items-center gap-2">
-                          <button
-                            onClick={() => handleApprovePost(post.id)}
-                            className="flex items-center gap-1 px-3 py-1 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-                          >
-                            <CheckCircle className="w-4 h-4" />
-                            Approve
-                          </button>
+                          {post.status === "submitted" && (
+                            <div className="flex items-center gap-2">
+                              <button
+                                onClick={() => handleApprovePost(post.id)}
+                                className="flex items-center gap-1 px-3 py-1 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                              >
+                                <CheckCircle className="w-4 h-4" />
+                                Approve
+                              </button>
 
-                          <button
-                            onClick={() => handleRejectPost(post.id)}
-                            className="flex items-center gap-1 px-3 py-1 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
-                          >
-                            <XCircle className="w-4 h-4" />
-                            Reject
-                          </button>
-                        </div>
-                      </td>
+                              <button
+                                onClick={() => handleRejectPost(post.id)}
+                                className="flex items-center gap-1 px-3 py-1 bg-red-600 text-white rounded-lg hover:bg-red-700"
+                              >
+                                <XCircle className="w-4 h-4" />
+                                Reject
+                              </button>
+                            </div>
+                          )}
+                        </td>
+
                     </tr>
                   ))}
               </tbody>

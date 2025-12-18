@@ -54,5 +54,11 @@ export const authenticate = async (req, res, next) => {
 export const requireRole = (roles) => (req, _res, next) =>
   roles.includes(req.user.role) ? next() : next({ status: 403, message: "Insufficient permissions" });
 //
-export const requireAdmin = requireRole(['super_admin']);
+export const requireAdmin = (req, res, next) => {
+  if (req.user.role !== "super_admin") {
+    return res.status(403).json({ error: "Admin access required" });
+  }
+  next();
+};
+
 export const requireResearcher = requireRole(['super_admin', 'researcher']);

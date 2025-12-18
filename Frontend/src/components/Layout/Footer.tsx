@@ -1,4 +1,4 @@
-import { BookOpen } from 'lucide-react';
+// import { BookOpen } from 'lucide-react';
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -9,8 +9,8 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center gap-2 text-white mb-4">
-              <BookOpen className="w-6 h-6" />
-              <span className="text-xl font-bold">Pi Labs</span>
+              {/* <BookOpen className="w-6 h-6" /> */}
+              <span className="text-xl font-bold">Pi Labs - Commons Reasearch Foundation</span>
             </div>
             <p className="text-gray-400 max-w-md">
               A professional platform for publishing and sharing research, field studies, and knowledge with the world.
