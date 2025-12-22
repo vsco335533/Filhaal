@@ -1,15 +1,26 @@
-import { Link, useNavigate } from 'react-router-dom';
-import { LogOut, User, Home, FileText, Video, Image, LayoutDashboard } from 'lucide-react';
-import { useAuth } from '../../contexts/AuthContext';
-import logo from '../../assets/image (1).png'; // New SVG
+import { Link, useNavigate } from "react-router-dom";
+import {
+  LogOut,
+  User,
+  Home,
+  FileText,
+  Video,
+  Image,
+  LayoutDashboard,
+  MoreVertical,
+} from "lucide-react";
+import { useAuth } from "../../contexts/AuthContext";
+import { useState } from "react";
+import logo from "../../assets/image (1-).png";
 
 export function Header() {
   const { user, profile, signOut } = useAuth();
   const navigate = useNavigate();
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const handleSignOut = async () => {
     await signOut();
-    navigate('/');
+    navigate("/");
   };
 
   return (
@@ -17,59 +28,81 @@ export function Header() {
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20 pt-1">
           
-          {/* Logo */}
+          {/* LOGO */}
           <Link to="/" className="flex items-center gap-5" aria-label="Pi Labs Home">
             <img
               src={logo}
               alt="Pi LABS — Commons Research Foundation"
-              className="h-20 w-50 object-contain "
+              className="h-16 w-auto object-contain"
               draggable="false"
             />
           </Link>
 
-          {/* Navigation links */}
+          {/* NAV LINKS */}
           <div className="hidden md:flex items-center gap-6">
-            <Link to="/" className="flex items-center gap-2 text-gray-700 hover:text-gray-600 pb-6">
-              <Home className="w-6 h-16 " />
+            <Link to="/" className="flex items-center gap-2 text-gray-700 hover:text-gray-600">
+              <Home className="w-5 h-5" />
               Home
             </Link>
-            <Link to="/research" className="flex items-center gap-2 text-gray-700 hover:text-gray-600 pb-6">
-              <FileText className="w-6 h-16 " />
+
+            <Link to="/research" className="flex items-center gap-2 text-gray-700 hover:text-gray-600">
+              <FileText className="w-5 h-5" />
               Research
             </Link>
-            <Link to="/videos" className="flex items-center gap-2 text-gray-700 hover:text-gray-600 pb-6">
-              <Video className="w-6 h-16 " />
+
+            <Link to="/videos" className="flex items-center gap-2 text-gray-700 hover:text-gray-600">
+              <Video className="w-5 h-5" />
               Videos
             </Link>
-            <Link to="/gallery" className="flex items-center gap-2 text-gray-700 hover:text-gray-600 pb-6">
-              <Image className="w-6 h-16 " />
+
+            <Link to="/gallery" className="flex items-center gap-2 text-gray-700 hover:text-gray-600">
+              <Image className="w-5 h-5" />
               Gallery
             </Link>
           </div>
 
-          {/* Auth section */}
-          <div className="flex items-center gap-4">
+          {/* AUTH SECTION */}
+          <div className="flex items-center gap-4 relative">
             {user ? (
               <>
-                <Link
-                  to={profile?.role === 'super_admin' ? '/admin' : '/dashboard'}
-                  className="flex items-center gap-2 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700"
-                >
-                  <LayoutDashboard className="w-4 h-4" />
-                  Dashboard
-                </Link>
+                {/* KEBAB MENU BUTTON */}
                 <button
-                  onClick={handleSignOut}
-                  className="flex items-center gap-2 px-4 py-3 text-gray-700 hover:text-gray-600 "
+                  onClick={() => setMenuOpen(!menuOpen)}
+                  className="p-2 rounded-full hover:bg-gray-100"
                 >
-                  <LogOut className="w-4 h-4" />
-                  Sign Out
+                  <MoreVertical className="w-5 h-5 text-gray-700" />
                 </button>
+
+                {/* DROPDOWN MENU */}
+                {menuOpen && (
+                  <div className="absolute right-0 top-14 w-44 bg-white border rounded-lg shadow-lg z-50">
+                    
+                    <Link
+                      to={profile?.role === "super_admin" ? "/admin" : "/dashboard"}
+                      onClick={() => setMenuOpen(false)}
+                      className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100"
+                    >
+                      <LayoutDashboard className="w-4 h-4" />
+                      Dashboard
+                    </Link>
+
+                    <button
+                      onClick={() => {
+                        handleSignOut();
+                        setMenuOpen(false);
+                      }}
+                      className="flex w-full items-center gap-2 px-4 py-2 hover:bg-gray-100 text-left"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      Sign Out
+                    </button>
+                  </div>
+                )}
               </>
             ) : (
               <Link
                 to="/login"
-                 className="flex items-center gap-2 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors mt-[-19px]"
+                className="flex items-center gap-2 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700"
               >
                 <User className="w-4 h-4" />
                 Sign In

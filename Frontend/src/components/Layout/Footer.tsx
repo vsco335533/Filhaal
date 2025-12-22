@@ -36,7 +36,7 @@ export function Footer() {
         </div>
 
         <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-500">
-          <p>&copy; {currentYear} Pi Labs - Commons Reasearch Foundation. All rights reserved.</p>
+          <p> <span className="copyleft" >&copy;</span>  {currentYear} Pi Labs - Commons Reasearch Foundation. All rights reserved.</p>
         </div>
       </div>
     </footer>

@@ -64,6 +64,10 @@ export const getPostBySlug = async (req, res) => {
   try {
     const { slug } = req.params;
 
+      const ip =
+      req.headers['x-forwarded-for'] ||
+      req.socket.remoteAddress;
+
     const result = await query(
       `SELECT p.*,
               json_build_object('full_name', pr.full_name, 'avatar_url', pr.avatar_url) as profiles,
@@ -90,10 +94,30 @@ export const getPostBySlug = async (req, res) => {
       return res.status(404).json({ error: 'Post not found' });
     }
 
-    await query(
-      'UPDATE posts SET view_count = view_count + 1 WHERE id = $1',
-      [result.rows[0].id]
+    const postId = result.rows[0].id;
+
+    // ✅ Check if this IP already viewed
+     const viewCheck = await query(
+      `SELECT 1 FROM post_views WHERE post_id = $1 AND ip_address = $2`,
+      [postId, ip]
     );
+
+    if (viewCheck.rows.length === 0) {
+      // First time view → increase count
+      await query(
+        `INSERT INTO post_views (post_id, ip_address)
+         VALUES ($1, $2)`,
+        [postId, ip]
+      );
+
+      await query(
+        `UPDATE posts
+         SET view_count = view_count + 1
+         WHERE id = $1`,
+        [postId]
+      );
+    }
+
 
     res.json(result.rows[0]);
   } catch (error) {

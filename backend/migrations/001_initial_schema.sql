@@ -148,6 +148,7 @@ CREATE TABLE IF NOT EXISTS moderation_log (
   created_at timestamptz DEFAULT now()
 );
 
+
 -- =============================================
 -- INDEXES FOR PERFORMANCE
 -- =============================================
