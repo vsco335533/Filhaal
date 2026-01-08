@@ -125,6 +125,16 @@ export function Home() {
               </div>
             </div>
           </div>
+          {/* More Books Button */}
+          <div className="mt-6 text-center">
+            <Link
+              to="/books"
+              className="inline-flex items-center gap-2 px-4 py-2 border border-red-700 text-red-700 font-semibold rounded hover:bg-red-700 hover:text-white transition"
+            >
+              More Books <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+
         </aside>
 
         {/* Center - Research posts */}
@@ -203,6 +213,16 @@ export function Home() {
               </div>
             ))}
           </div>
+          {/* More Videos Button */}
+          <div className="mt-6 text-center">
+            <Link
+              to="/videos"
+              className="inline-flex items-center gap-2 px-4 py-2 border border-red-700 text-red-700 font-semibold rounded hover:bg-red-700 hover:text-white transition"
+            >
+              More Videos <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+
         </aside>
       </main>
 

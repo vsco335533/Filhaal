@@ -1,44 +1,55 @@
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { apiGet } from '../../lib/api';
+import { Link, useParams } from "react-router-dom";
+
+const MONTHS = [
+  "January","February","March","April","May","June",
+  "July","August","September","October","November","December"
+];
 
 export default function EditionDetail() {
-  const { id } = useParams();
-  const [loading, setLoading] = useState(true);
-  const [pdfUrl, setPdfUrl] = useState<string | null>(null);
-  const [title, setTitle] = useState<string | null>(null);
-  const [sourceUrl, setSourceUrl] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const { id, month } = useParams();
 
-  useEffect(() => {
-    if (!id) return;
-    let mounted = true;
-    apiGet<any>(`/previous-edition?id=${encodeURIComponent(id)}`)
-      .then(res => {
-        if (!mounted) return;
-        setPdfUrl(res.pdfUrl || null);
-        setTitle(res.title || null);
-        setSourceUrl(res.sourceUrl || null);
-      })
-      .catch(err => setError(err.message || 'Failed to load'))
-      .finally(() => setLoading(false));
+  // YEAR PAGE → MONTHS
+  if (id && !month) {
+    return (
+      <div className="max-w-6xl mx-auto px-4 py-12">
+        <div className="bg-black text-white text-center py-2 font-semibold mb-6">
+          All previous points
+        </div>
 
-    return () => { mounted = false };
-  }, [id]);
+        <h1 className="text-xl font-bold text-center mb-8">
+          Issues of {id}
+        </h1>
 
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-10 text-center text-lg">
+          {MONTHS.map((m) => (
+            <Link
+              key={m}
+              to={`/previous-editions/${id}/${m.toLowerCase()}`}
+              className="hover:text-red-700"
+            >
+              {m} {id}
+            </Link>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  // MONTH PAGE → CONTENT
   return (
-    <div className="max-w-4xl mx-auto px-4 py-12">
-      <h1 className="text-2xl font-bold mb-4">{title || 'Edition'}</h1>
-      {loading ? <div>Loading...</div> : error ? <div className="text-red-600">{error}</div> : pdfUrl ? (
-        <div style={{height: 800}} className="w-full">
-          <iframe src={pdfUrl} title={title || 'edition'} className="w-full h-full border" />
-        </div>
-      ) : (
-        <div>
-          <p>No embeddable PDF found.</p>
-          {sourceUrl && <a href={sourceUrl} target="_blank" rel="noreferrer" className="text-red-700 underline">Open original</a>}
-        </div>
-      )}
+    <div className="max-w-5xl mx-auto px-4 py-12">
+      <div className="bg-black text-white text-center py-2 font-semibold mb-6">
+        All previous points
+      </div>
+
+      <h1 className="text-xl font-bold text-center mb-6">
+        Issues for {month} {id}
+      </h1>
+
+      <p className="text-center text-gray-600">
+        Content for this month will appear here
+        (articles / videos / PDFs).
+      </p>
     </div>
-  )
+  );
 }

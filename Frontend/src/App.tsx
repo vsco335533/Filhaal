@@ -86,6 +86,7 @@ function App() {
               <Route path="/category/:slug" element={<CategoryHandler />} />
               <Route path="/previous-editions" element={<PreviousEditions />} />
               <Route path="/previous-editions/:id" element={<EditionDetail />} />
+              <Route path="/previous-editions/:id/:month" element={<EditionDetail />} />
             </Routes>
           </main>
           <Footer />
