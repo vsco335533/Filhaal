@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { Header } from './components/Layout/Header';
 import { Footer } from './components/Layout/Footer';
@@ -86,6 +86,7 @@ function App() {
               <Route path="/category/:slug" element={<CategoryHandler />} />
               <Route path="/previous-editions" element={<PreviousEditions />} />
               <Route path="/previous-editions/:id" element={<EditionDetail />} />
+              <Route path="/issues" element={<Navigate to="/previous-editions" replace />} />
               <Route path="/previous-editions/:id/:month" element={<EditionDetail />} />
             </Routes>
           </main>
