@@ -45,12 +45,12 @@ export function Contact() {
         <div>
           <h3 className="text-xl font-semibold mb-4">OUR ADDRESS</h3>
           <div className="bg-white p-6 rounded text-gray-800 space-y-4">
-            <p><strong>Email:</strong> hello@commonscollective.cc</p>
-            <p><strong>Address:</strong> Mithra Hills, Hyder Nagar, Hyderabad, India - 500072</p>
+            <p><strong>Email:</strong> contact@filhaal.in, filhaalpatna@gmail.com</p>
+            <p><strong>Address:</strong>L 164, Road No. 23, Sri Krishna Nagar, Patna. Pin – 800001  Phone: +91 94720 48408</p>
             <div>
               <h4 className="font-semibold mt-4">WE ARE SOCIAL</h4>
               <div className="flex gap-3 mt-2">
-                <a href="#" className="px-3 py-2 border rounded">in</a>
+                <a href="https://www.facebook.com/hindi.filhaal/" className="px-3 py-2 border rounded">in</a>
                 <a href="#" className="px-3 py-2 border rounded">ig</a>
               </div>
             </div>

@@ -14,6 +14,7 @@ import categoryRoutes from './routes/categoryRoutes.js';
 import mediaRoutes from './routes/mediaRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import contactRoutes from './routes/contactRoutes.js';
+import debatesRoutes from './routes/debates.js';
 
 
 import path from "path";
@@ -57,6 +58,7 @@ app.use('/api', categoryRoutes);
 app.use('/api/media', mediaRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/contact', contactRoutes);
+app.use('/api', debatesRoutes);
 
 app.use((req, res) => {
   res.status(404).json({ error: 'Route not found' });

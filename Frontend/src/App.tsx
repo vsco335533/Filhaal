@@ -8,11 +8,22 @@ import { Login } from './pages/Login';
 import { Research } from './pages/Research';
 import { Videos } from './pages/Videos';
 import { Gallery } from './pages/Gallery';
+import Books from './pages/Books';
 import { PostDetail } from './pages/PostDetail';
 import { Contact } from './pages/Contact';
 import { ResearcherDashboard } from './pages/ResearcherDashboard';
 import { AdminDashboard } from './pages/AdminDashboard';
 import { PostEditor } from './pages/PostEditor';
+import TermsAndPolicies from './pages/TermsAndPolicies';
+import About from './pages/About';
+import Donations from './pages/Donations';
+import LetterToEditor from './pages/LetterToEditor';
+import Discussion from './pages/Discussion';
+import DebateDetail from './pages/debates/[id]';
+import CategoryHandler from './pages/CategoryHandler';
+import PreviousEditions from './pages/PreviousEditions';
+import EditionDetail from './pages/previous-editions/[id]';
+
 
 function App() {
   return (
@@ -28,6 +39,7 @@ function App() {
               <Route path="/videos" element={<Videos />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/gallery" element={<Gallery />} />
+              <Route path="/books" element={<Books />} />
               <Route path="/posts/:slug" element={<PostDetail />} />
 
               <Route
@@ -63,6 +75,17 @@ function App() {
                   </ProtectedRoute>
                 }
               />
+              <Route path="/terms-and-policies" element={<TermsAndPolicies />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/donations" element={<Donations />} />
+              <Route path="/letter-to-editor" element={<LetterToEditor />} />
+              {/* alias to match external Filhaal URL */}
+              <Route path="/write-in-filhaal" element={<LetterToEditor />} />
+              <Route path="/debates" element={<Discussion />} />
+              <Route path="/debates/:id" element={<DebateDetail />} />
+              <Route path="/category/:slug" element={<CategoryHandler />} />
+              <Route path="/previous-editions" element={<PreviousEditions />} />
+              <Route path="/previous-editions/:id" element={<EditionDetail />} />
             </Routes>
           </main>
           <Footer />

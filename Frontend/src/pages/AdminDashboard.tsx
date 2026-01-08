@@ -3,12 +3,22 @@ import { Users, FileText, Eye, CheckCircle, XCircle, Clock } from "lucide-react"
 import { apiGet, apiPost } from "../lib/api";
 import { Post, Profile } from "../types";
 
+interface Letter {
+  id: string;
+  name: string;
+  email?: string;
+  subject?: string;
+  message: string;
+  createdAt: string;
+}
+
 export function AdminDashboard() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [researchers, setResearchers] = useState<Profile[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] =
-    useState<"overview" | "posts" | "researchers">("overview");
+    useState<"overview" | "posts" | "researchers" | "letters">("overview");
+  const [letters, setLetters] = useState<Letter[]>([]);
 
   useEffect(() => {
     loadData();
@@ -24,6 +34,15 @@ export function AdminDashboard() {
 
       setPosts(postsData || []);
       setResearchers(researchersData || []);
+      // load letters from localStorage for admin view
+      try {
+        const raw = localStorage.getItem("filhaal_letters");
+        if (raw) setLetters(JSON.parse(raw));
+        else setLetters([]);
+      } catch (e) {
+        console.error("Failed to load letters:", e);
+        setLetters([]);
+      }
     } catch (error) {
       console.error("Error loading data:", error);
     } finally {
@@ -98,60 +117,97 @@ export function AdminDashboard() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-6 mb-8">
-          <div className="bg-white rounded-xl border border-gray-200 p-6">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-gray-600 text-sm">Total Posts</span>
-              <FileText className="w-5 h-5 text-gray-600" />
-            </div>
-            <p className="text-3xl font-bold text-gray-900">
-              {stats.totalPosts}
-            </p>
-          </div>
-
-          <div className="bg-white rounded-xl border border-gray-200 p-6">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-gray-600 text-sm">Published</span>
-              <CheckCircle className="w-5 h-5 text-green-600" />
-            </div>
-            <p className="text-3xl font-bold text-gray-900">
-              {stats.publishedPosts}
-            </p>
-          </div>
-
-          <div className="bg-white rounded-xl border border-gray-200 p-6">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-gray-600 text-sm">Pending</span>
-              <Clock className="w-5 h-5 text-yellow-600" />
-            </div>
-            <p className="text-3xl font-bold text-gray-900">
-              {stats.pendingPosts}
-            </p>
-          </div>
-
-          <div className="bg-white rounded-xl border border-gray-200 p-6">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-gray-600 text-sm">Researchers</span>
-              <Users className="w-5 h-5 text-purple-600" />
-            </div>
-            <p className="text-3xl font-bold text-gray-900">
-              {stats.totalResearchers}
-            </p>
-          </div>
-
-          <div className="bg-white rounded-xl border border-gray-200 p-6">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-gray-600 text-sm">Total Views</span>
-              <Eye className="w-5 h-5 text-teal-600" />
-            </div>
-            <p className="text-3xl font-bold text-gray-900">
-              {stats.totalViews}
-            </p>
-          </div>
+        <div className="mb-6">
+          <nav className="flex items-center gap-2">
+            <button onClick={() => setActiveTab("overview")} className={`px-3 py-1 rounded ${activeTab==="overview"?"bg-red-700 text-white":"bg-white text-gray-700 border"}`}>Overview</button>
+            <button onClick={() => setActiveTab("posts")} className={`px-3 py-1 rounded ${activeTab==="posts"?"bg-red-700 text-white":"bg-white text-gray-700 border"}`}>Posts</button>
+            <button onClick={() => setActiveTab("researchers")} className={`px-3 py-1 rounded ${activeTab==="researchers"?"bg-red-700 text-white":"bg-white text-gray-700 border"}`}>Researchers</button>
+            <button onClick={() => setActiveTab("letters")} className={`px-3 py-1 rounded ${activeTab==="letters"?"bg-red-700 text-white":"bg-white text-gray-700 border"}`}>Letters</button>
+          </nav>
         </div>
 
+        {activeTab === "overview" && (
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-6 mb-8">
+            <div className="bg-white rounded-xl border border-gray-200 p-6">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-gray-600 text-sm">Total Posts</span>
+                <FileText className="w-5 h-5 text-gray-600" />
+              </div>
+              <p className="text-3xl font-bold text-gray-900">
+                {stats.totalPosts}
+              </p>
+            </div>
+
+            <div className="bg-white rounded-xl border border-gray-200 p-6">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-gray-600 text-sm">Published</span>
+                <CheckCircle className="w-5 h-5 text-green-600" />
+              </div>
+              <p className="text-3xl font-bold text-gray-900">
+                {stats.publishedPosts}
+              </p>
+            </div>
+
+            <div className="bg-white rounded-xl border border-gray-200 p-6">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-gray-600 text-sm">Pending</span>
+                <Clock className="w-5 h-5 text-yellow-600" />
+              </div>
+              <p className="text-3xl font-bold text-gray-900">
+                {stats.pendingPosts}
+              </p>
+            </div>
+
+            <div className="bg-white rounded-xl border border-gray-200 p-6">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-gray-600 text-sm">Researchers</span>
+                <Users className="w-5 h-5 text-purple-600" />
+              </div>
+              <p className="text-3xl font-bold text-gray-900">
+                {stats.totalResearchers}
+              </p>
+            </div>
+
+            <div className="bg-white rounded-xl border border-gray-200 p-6">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-gray-600 text-sm">Total Views</span>
+                <Eye className="w-5 h-5 text-teal-600" />
+              </div>
+              <p className="text-3xl font-bold text-gray-900">
+                {stats.totalViews}
+              </p>
+            </div>
+          </div>
+          )}
+
         {/* Pending Approval Table */}
-        <div className="bg-white rounded-xl border border-gray-200">
+        {activeTab === "letters" ? (
+          <div className="bg-white rounded-xl border border-gray-200 p-6">
+            <div className="p-2 border-b mb-4">
+              <h2 className="text-xl font-bold text-gray-900">Letters to Editor</h2>
+            </div>
+
+            {letters.length === 0 ? (
+              <div className="text-gray-500">No letters submitted.</div>
+            ) : (
+              <div className="space-y-4">
+                {letters.map((l) => (
+                  <div key={l.id} className="border rounded p-4 bg-white">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <div className="font-semibold">{l.subject || "Letter"}</div>
+                        <div className="text-sm text-gray-600">By {l.name} {l.email && <span>&middot; {l.email}</span>}</div>
+                      </div>
+                      <div className="text-xs text-gray-500">{new Date(l.createdAt).toLocaleString()}</div>
+                    </div>
+                    <div className="mt-3 text-gray-700 whitespace-pre-wrap">{l.message}</div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="bg-white rounded-xl border border-gray-200">
           <div className="p-6 border-b border-gray-200">
             <h2 className="text-xl font-bold text-gray-900">Pending Approval</h2>
           </div>
@@ -249,6 +305,7 @@ export function AdminDashboard() {
             </table>
           )}
         </div>
+        )}
       </div>
     </div>
   );

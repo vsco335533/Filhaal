@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 // import { LogIn, BookOpen } from 'lucide-react';
 import { LogIn } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
-import logo2 from '../assets/image (2).png';
+import logo2 from '../assets/image(-1).png';
 
 export function Login() {
   const [email, setEmail] = useState('');
@@ -33,26 +33,26 @@ export function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-gradient-to-br from-red-50 via-red-700 to-gray-50 flex items-center justify-center px-4">
       <div className="max-w-md w-full">
         <div className="text-center mb-8">
           <div className="flex justify-center mb-4">
-            <div className="bg-white-600 p-3 rounded-2xl">
+            <div className="bg-grey-600 p-3 rounded-2xl">
               {/* <BookOpen className="w-12 h-12 text-white" /> */}
-                <img
+                {/* <img
               src={logo2}
               alt="Pi LABS — Commons Research Foundation"
               className="w-20 h-25 object-contain "
               draggable="false"
-            />
+            /> */}
               
             </div>
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome to Pi Labs</h1>
-          <p className="text-gray-600">Sign in to access your dashboard</p>
+          {/* <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome to Pi Labs</h1> */}
+          <p className="text-white">Sign in to access your dashboard</p>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
+        <div className="bg-black rounded-2xl shadow-xl border border-black p-8">
           <form onSubmit={handleSubmit} className="space-y-6">
             {error && (
               <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
@@ -61,7 +61,7 @@ export function Login() {
             )}
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="email" className="block text-sm font-medium text-white mb-2">
                 Email Address
               </label>
               <input
@@ -76,7 +76,7 @@ export function Login() {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="password" className="block text-sm font-medium text-white mb-2">
                 Password
               </label>
               <input
@@ -109,7 +109,7 @@ export function Login() {
           <div className="mt-6 text-center text-sm text-gray-600">
             <p>Demo Credentials:</p>
             <p className="text-xs text-gray-500 mt-1">Admin: admin@example.com / password</p>
-            <p className="text-xs text-gray-500">Researcher: researcher@example.com / password</p>
+            {/* <p className="text-xs text-gray-500">Researcher: researcher@example.com / password</p> */}
           </div>
         </div>
       </div>
