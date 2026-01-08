@@ -25,10 +25,7 @@ export function TermsAndPolicies() {
         <p className="text-gray-700">Contributions published on Filhaal present the authors' own views and do not necessarily reflect the positions of the Editor or the Filhaal Trust.</p>
       </section>
 
-      <div className="mt-6 text-sm text-gray-600">
-        <p>These are concise summaries extracted from the public Terms & Policies page.</p>
-        <p>For the original and complete text, see: <a href="https://filhaal.vercel.app/termsandpolicies" className="text-red-700 underline">Original Terms & Policies</a></p>
-      </div>
+      
 
       <div className="mt-8">
         <Link to="/" className="text-sm text-gray-600 hover:underline">Back to home</Link>

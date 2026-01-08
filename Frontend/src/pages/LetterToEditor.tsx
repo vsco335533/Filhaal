@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { Link } from "react-router-dom";
 
 interface Letter {
   id: string;
@@ -93,6 +94,9 @@ export function LetterToEditor() {
         <div className="mt-4 text-sm text-green-700">Thank you — your letter has been submitted.</div>
       )}
 
+            <div className="mt-8">
+        <Link to="/" className="text-sm text-gray-600 hover:underline">Back to home</Link>
+      </div>
       
     </div>
   );

@@ -57,7 +57,8 @@ export function Research() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="bg-gradient-to-br from-gray-600 to-gray-800 text-white py-12">
+      <div className="bg-gradient-to-br from-black to-gray-800 text-white py-12">
+        {/* "bg-gradient-to-br from-black to-red-700 text-white py-12" */}
         <div className="max-w-7xl mx-auto px-4">
           <h1 className="text-4xl font-bold mb-3">Research Library</h1>
           <p className="text-lg text-gray-100">
