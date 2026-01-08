@@ -6,7 +6,7 @@ import logo from "../../assets/image(-1).png";
 
 const categories = [
   "Editor's Letter",
-  "Discussion",
+  "Discussions & Debates",
   "Membership",
   "Contents"
 ];
@@ -94,7 +94,7 @@ export function Header() {
       </div>
 
       {/* Category tabs like magazine — also include Research, Videos, Images */}
-      <div className="bg-white shadow-inner">
+      <div className="bg-black shadow-inner">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-4 overflow-x-auto py-3">
             {categories.map((cat) => {

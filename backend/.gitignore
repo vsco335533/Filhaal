@@ -6,10 +6,10 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
+node_modules/
+.env
+dist/
+build/
 
 .vscode/*
 !.vscode/extensions.json

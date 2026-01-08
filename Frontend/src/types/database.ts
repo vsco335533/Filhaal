@@ -159,6 +159,8 @@ export interface Database {
       };
       media: {
                     Row: {
+                  id(id: (id: any) => void): void;
+                  id(id: any): void;
                   _id: string;
                   title: string;
                   description: string | null;

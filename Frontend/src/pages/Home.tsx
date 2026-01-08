@@ -134,7 +134,6 @@ export function Home() {
               More Books <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
-
         </aside>
 
         {/* Center - Research posts */}
@@ -222,7 +221,6 @@ export function Home() {
               More Videos <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
-
         </aside>
       </main>
 

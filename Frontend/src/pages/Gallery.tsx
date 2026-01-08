@@ -224,7 +224,7 @@ export function Gallery() {
     }
   };
 
-  const approveImage = async (id: string) => {
+  const approveImage = async (id: string): Promise<void> => {
     try {
       await apiPost(`/media/${id}/approve`, {});
       loadImages();

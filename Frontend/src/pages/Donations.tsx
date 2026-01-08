@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 export function Donations() {
   const [amount, setAmount] = useState<number | "">(500);
@@ -86,11 +87,9 @@ export function Donations() {
 
         <p className="text-xs text-gray-500 mt-3">Note: This uses client-side Razorpay checkout for demo. For production, create orders on the server and verify payments server-side.</p>
       </div>
-
-      {/* <div className="mt-6 text-sm text-gray-600">
-        <p>Summary extracted from the public donations page. For full details see the original source:</p>
-        <p><a href="https://filhaal.vercel.app/donations" className="text-red-700 underline">Original Donations page</a></p>
-      </div> */}
+      <div className="mt-8">
+        <Link to="/" className="text-sm text-gray-600 hover:underline">Back to home</Link>
+      </div>
     </div>
   );
 }
