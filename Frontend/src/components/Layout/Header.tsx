@@ -8,7 +8,8 @@ const categories = [
   "Editor's Letter",
   "Discussions & Debates",
   "Membership",
-  "Contents"
+  // "issues"
+
 ];
 
 export function Header() {
@@ -47,7 +48,7 @@ export function Header() {
               <Link to="/donations" className="hover:underline">Donations</Link>
               <Link to="/letter-to-editor" className="hover:underline">Write in Filhaal</Link>
               <Link to="/contact" className="hover:underline">Contact</Link>
-              <Link to="/issues" className="hover:underline">All issues</Link>
+              {/* <Link to="/issues" className="hover:underline">contants</Link> */}
             </div>
 
             <div className="flex items-center gap-4 relative">
@@ -56,7 +57,7 @@ export function Header() {
                 className="hidden sm:inline-block px-2 py-1 rounded bg-gray-600 text-sm"
               />
               {!user ? (
-                <Link to="/login" className="ml-2 px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded text-sm">
+                <Link to="/login" className="ml-2 px-3 py-1 bg-red-800 hover:bg-red-700 text-white rounded text-sm">
                   Sign In
                 </Link>
               ) : (
@@ -94,7 +95,7 @@ export function Header() {
       </div>
 
       {/* Category tabs like magazine — also include Research, Videos, Images */}
-      <div className="bg-black shadow-inner">
+      <div className="bg-black rounded shadow-inner">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-4 overflow-x-auto py-3">
             {categories.map((cat) => {
@@ -121,7 +122,7 @@ export function Header() {
             })}
 
             <Link to="/research" className="flex-none px-4 py-2 font-semibold bg-red-800 text-white rounded-sm hover:opacity-90">
-              Latest Articals
+              Latest Articles
             </Link>
             <Link to="/videos" className="flex-none px-4 py-2 font-semibold bg-red-800 text-white rounded-sm hover:opacity-90">
               Videos
@@ -132,6 +133,7 @@ export function Header() {
             <Link to="/books" className="flex-none px-4 py-2 font-semibold bg-red-800 text-white rounded-sm hover:opacity-90">
               Filhaal Books
             </Link>
+            <Link to="/issues" className="flex-none px-4 py-2 font-semibold bg-red-800 text-white rounded-sm hover:opacity-90">All issues</Link>
           </div>
         </div>
       </div>

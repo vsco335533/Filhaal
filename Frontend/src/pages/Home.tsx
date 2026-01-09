@@ -41,7 +41,7 @@ export function Home() {
   const BOOK4_SRC = '/src/assets/Book4.webp';
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-blue-50">  
 
       {/* Main: three column layout - left books, center research posts, right videos */}
       <main className="max-w-7xl mx-auto px-4 py-12 grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -126,7 +126,7 @@ export function Home() {
             </div>
           </div>
           {/* More Books Button */}
-          <div className="mt-6 text-center">
+          <div className="mt-6 text-left   ">
             <Link
               to="/books"
               className="inline-flex items-center gap-2 px-4 py-2 border border-red-700 text-red-700 font-semibold rounded hover:bg-red-700 hover:text-white transition"
@@ -140,7 +140,7 @@ export function Home() {
         <section className="lg:col-span-6 order-2">
           <div className="flex justify-between items-center mb-6">
             <div>
-              <h2 className="text-3xl font-bold text-gray-900">Latest Articals</h2>
+              <h2 className="text-3xl font-bold text-gray-900">Latest Articles</h2>
               <p className="text-gray-600">Recent publications</p>
             </div>
 
@@ -197,7 +197,7 @@ export function Home() {
         <aside className="lg:col-span-3 order-3">
           <h3 className="text-lg font-semibold mb-4">Videos</h3>
           <div className="space-y-4">
-            {["0M4qtvjYft8", "qhUeh5Sy-q4","IzgSW-Lid_M"].map((id) => (
+            {["0M4qtvjYft8","IzgSW-Lid_M","qhUeh5Sy-q4"].map((id) => (
               <div key={id} className="bg-white border rounded-lg overflow-hidden">
                 <iframe
                   title={id}
@@ -213,7 +213,7 @@ export function Home() {
             ))}
           </div>
           {/* More Videos Button */}
-          <div className="mt-6 text-center">
+          <div className="mt-6 text-right">
             <Link
               to="/videos"
               className="inline-flex items-center gap-2 px-4 py-2 border border-red-700 text-red-700 font-semibold rounded hover:bg-red-700 hover:text-white transition"

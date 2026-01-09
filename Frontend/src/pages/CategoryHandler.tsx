@@ -10,7 +10,7 @@ export default function CategoryHandler() {
   if (s.includes('editor')) return <Navigate to="/write-in-filhaal" replace />;
   if (s.includes('currently')) return <Navigate to="/write-in-filhaal" replace />;
   if (s.includes('membership')) return <Navigate to="/donations" replace />;
-  if (s.includes('contents')) return <Navigate to="/previous-editions" replace />;
+  if (s.includes('issues')) return <Navigate to="/issues" replace />;
 
   // Default: forward to research page with category query
   return <Navigate to={`/research?category=${encodeURIComponent(s)}`} replace />;
