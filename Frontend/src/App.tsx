@@ -18,8 +18,10 @@ import TermsAndPolicies from './pages/TermsAndPolicies';
 import About from './pages/About';
 import Donations from './pages/Donations';
 import LetterToEditor from './pages/LetterToEditor';
+import WriteInFilhaal from './pages/WriteInFilhaal';
 import Discussion from './pages/Discussion';
 import DebateDetail from './pages/debates/[id]';
+import DebateAdminUpload from './pages/DebateAdminUpload';
 import CategoryHandler from './pages/CategoryHandler';
 import PreviousEditions from './pages/PreviousEditions';
 import EditionDetail from './pages/previous-editions/[id]';
@@ -80,8 +82,16 @@ function App() {
               <Route path="/donations" element={<Donations />} />
               <Route path="/letter-to-editor" element={<LetterToEditor />} />
               {/* alias to match external Filhaal URL */}
-              <Route path="/write-in-filhaal" element={<LetterToEditor />} />
+              <Route path="/write-in-filhaal" element={<WriteInFilhaal />} />
               <Route path="/debates" element={<Discussion />} />
+              <Route
+                path="/debates/admin"
+                element={
+                  <ProtectedRoute requireAdmin>
+                    <DebateAdminUpload />
+                  </ProtectedRoute>
+                }
+              />
               <Route path="/debates/:id" element={<DebateDetail />} />
               <Route path="/category/:slug" element={<CategoryHandler />} />
               <Route path="/previous-editions" element={<PreviousEditions />} />

@@ -2,14 +2,14 @@ import { query } from "../config/database.js";
 
 export const submitContact = async (req, res) => {
   try {
-    const { name, email, message } = req.body;
+    const { name, email, subject, message, category } = req.body;
     if (!name || !email || !message) {
       return res.status(400).json({ error: "Missing required fields" });
     }
 
     const result = await query(
-      `INSERT INTO contacts (name, email, message) VALUES ($1, $2, $3) RETURNING *`,
-      [name, email, message]
+      `INSERT INTO contacts (name, email, subject, category, message) VALUES ($1, $2, $3, $4, $5) RETURNING *`,
+      [name, email, subject || null, category || 'general', message]
     );
 
     res.status(201).json({ message: "Submitted", contact: result.rows[0] });

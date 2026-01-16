@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { apiPost } from "../lib/api";
 
-export function LetterToEditor() {
+export function WriteInFilhaal() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [subject, setSubject] = useState("");
@@ -22,7 +22,7 @@ export function LetterToEditor() {
         email: email.trim() || null,
         subject: subject.trim() || null,
         message: message.trim(),
-        category: "letter_to_editor",
+        category: "write_in_filhaal",
       });
 
       setSubmitted(true);
@@ -41,9 +41,9 @@ export function LetterToEditor() {
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-12">
-      <h1 className="text-2xl font-bold mb-4">Letter to the Editor</h1>
+      <h1 className="text-2xl font-bold mb-4">Write in Filhaal</h1>
 
-      <p className="text-gray-700 mb-4">Share your feedback, a letter, or an article proposal for the editorial team. Submissions are reviewed by the editorial team. Admins can view submissions from the admin panel.</p>
+      <p className="text-gray-700 mb-4">Share your feedback, a letter, or an article proposal specifically for Filhaal. Submissions are reviewed by the editorial team. Admins can view submissions from the admin panel.</p>
 
       <form ref={formRef} onSubmit={onSubmit} className="bg-white border rounded p-6 space-y-4">
         <div>
@@ -72,7 +72,7 @@ export function LetterToEditor() {
       </form>
 
       {submitted && (
-        <div className="mt-4 text-sm text-green-700">Thank you — your letter has been submitted.</div>
+        <div className="mt-4 text-sm text-green-700">Thank you — your submission has been received.</div>
       )}
 
       <div className="mt-8">
@@ -82,4 +82,4 @@ export function LetterToEditor() {
   );
 }
 
-export default LetterToEditor;
+export default WriteInFilhaal;

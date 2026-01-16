@@ -18,7 +18,9 @@ export function AdminDashboard() {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] =
     useState<"overview" | "posts" | "researchers" | "letters">("overview");
-  const [letters, setLetters] = useState<Letter[]>([]);
+  const [lettersEditor, setLettersEditor] = useState<Letter[]>([]);
+  const [lettersFilhaal, setLettersFilhaal] = useState<Letter[]>([]);
+  const [contactsList, setContactsList] = useState<Letter[]>([]);
 
   useEffect(() => {
     loadData();
@@ -30,18 +32,29 @@ export function AdminDashboard() {
     try {
       const postsData = await apiGet("/posts?status=submitted,under_review");
       const researchersData = await apiGet("/users?role=researcher");
-   
-
       setPosts(postsData || []);
       setResearchers(researchersData || []);
-      // load letters from localStorage for admin view
+
+      // load letters from backend (admin-only endpoint) and separate by category
       try {
-        const raw = localStorage.getItem("filhaal_letters");
-        if (raw) setLetters(JSON.parse(raw));
-        else setLetters([]);
+        const contacts = await apiGet("/contact");
+        const list = (contacts || []).map((c: any) => ({
+          id: c.id,
+          name: c.name,
+          email: c.email,
+          subject: c.subject,
+          message: c.message,
+          createdAt: c.created_at || c.createdAt,
+          category: (c.category || "").toLowerCase(),
+        }));
+
+        setLettersEditor(list.filter((l: any) => l.category === "letter_to_editor"));
+        setLettersFilhaal(list.filter((l: any) => l.category === "write_in_filhaal"));
+        setContactsList(list.filter((l: any) => !["letter_to_editor", "write_in_filhaal"].includes(l.category)));
       } catch (e) {
-        console.error("Failed to load letters:", e);
-        setLetters([]);
+        console.error("Failed to load letters from backend:", e);
+        setLettersEditor([]);
+        setLettersFilhaal([]);
       }
     } catch (error) {
       console.error("Error loading data:", error);
@@ -122,7 +135,7 @@ export function AdminDashboard() {
             <button onClick={() => setActiveTab("overview")} className={`px-3 py-1 rounded ${activeTab==="overview"?"bg-red-700 text-white":"bg-white text-gray-700 border"}`}>Overview</button>
             <button onClick={() => setActiveTab("posts")} className={`px-3 py-1 rounded ${activeTab==="posts"?"bg-red-700 text-white":"bg-white text-gray-700 border"}`}>Posts</button>
             <button onClick={() => setActiveTab("researchers")} className={`px-3 py-1 rounded ${activeTab==="researchers"?"bg-red-700 text-white":"bg-white text-gray-700 border"}`}>Researchers</button>
-            <button onClick={() => setActiveTab("letters")} className={`px-3 py-1 rounded ${activeTab==="letters"?"bg-red-700 text-white":"bg-white text-gray-700 border"}`}>Letters</button>
+            <button onClick={() => setActiveTab("letters")} className={`px-3 py-1 rounded ${activeTab==="letters"?"bg-red-700 text-white":"bg-white text-gray-700 border"}`}>Responses</button>
           </nav>
         </div>
 
@@ -183,28 +196,77 @@ export function AdminDashboard() {
         {/* Pending Approval Table */}
         {activeTab === "letters" ? (
           <div className="bg-white rounded-xl border border-gray-200 p-6">
-            <div className="p-2 border-b mb-4">
-              <h2 className="text-xl font-bold text-gray-900">Letters to Editor</h2>
-            </div>
+                <div className="p-2 border-b mb-4">
+                  <h2 className="text-xl font-bold text-gray-900">Submissions</h2>
+                </div>
 
-            {letters.length === 0 ? (
-              <div className="text-gray-500">No letters submitted.</div>
-            ) : (
-              <div className="space-y-4">
-                {letters.map((l) => (
-                  <div key={l.id} className="border rounded p-4 bg-white">
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <div className="font-semibold">{l.subject || "Letter"}</div>
-                        <div className="text-sm text-gray-600">By {l.name} {l.email && <span>&middot; {l.email}</span>}</div>
+                <div className="space-y-6 ">
+                  <div className="border rounded p-4 bg-green-200">
+                    <h3 className="text-lg font-semibold mb-2 ">Contact Form Submissions :</h3>
+                    {contactsList.length === 0 ? (
+                      <div className="text-gray-500">No contact form submissions.</div>
+                    ) : (
+                      <div className="space-y-4">
+                        {contactsList.map((l) => (
+                          <div key={l.id} className="border rounded p-4 bg-white">
+                            <div className="flex justify-between items-start">
+                              <div>
+                                <div className="font-semibold">{l.subject || "Contact"}</div>
+                                <div className="text-sm text-gray-600">By {l.name} {l.email && <span>&middot; {l.email}</span>}</div>
+                              </div>
+                              <div className="text-xs text-gray-500">{new Date(l.createdAt).toLocaleString()}</div>
+                            </div>
+                            <div className="mt-3 text-gray-700 whitespace-pre-wrap">{l.message}</div>
+                          </div>
+                        ))}
                       </div>
-                      <div className="text-xs text-gray-500">{new Date(l.createdAt).toLocaleString()}</div>
-                    </div>
-                    <div className="mt-3 text-gray-700 whitespace-pre-wrap">{l.message}</div>
+                    )}
                   </div>
-                ))}
-              </div>
-            )}
+
+                  <div className="border rounded p-4 bg-red-200">
+                    <h3 className="text-lg font-semibold mb-2">Letters to Editor Responses :</h3>
+                    {lettersEditor.length === 0 ? (
+                      <div className="text-gray-500">No letters to Editor submitted.</div>
+                    ) : (
+                      <div className="space-y-4">
+                        {lettersEditor.map((l) => (
+                          <div key={l.id} className="border rounded p-4 bg-white">
+                            <div className="flex justify-between items-start">
+                              <div>
+                                <div className="font-semibold">{l.subject || "Letter"}</div>
+                                <div className="text-sm text-gray-600">By {l.name} {l.email && <span>&middot; {l.email}</span>}</div>
+                              </div>
+                              <div className="text-xs text-gray-500">{new Date(l.createdAt).toLocaleString()}</div>
+                            </div>
+                            <div className="mt-3 text-gray-700 whitespace-pre-wrap">{l.message}</div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="border rounded p-4 bg-blue-200">
+                    <h3 className="text-lg font-semibold mb-2">Write in Filhaal Responses :</h3>
+                    {lettersFilhaal.length === 0 ? (
+                      <div className="text-gray-500">No Write in Filhaal submissions.</div>
+                    ) : (
+                      <div className="space-y-4">
+                        {lettersFilhaal.map((l) => (
+                          <div key={l.id} className="border rounded p-4 bg-white">
+                            <div className="flex justify-between items-start">
+                              <div>
+                                <div className="font-semibold">{l.subject || "Submission"}</div>
+                                <div className="text-sm text-gray-600">By {l.name} {l.email && <span>&middot; {l.email}</span>}</div>
+                              </div>
+                              <div className="text-xs text-gray-500">{new Date(l.createdAt).toLocaleString()}</div>
+                            </div>
+                            <div className="mt-3 text-gray-700 whitespace-pre-wrap">{l.message}</div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
           </div>
         ) : (
           <div className="bg-white rounded-xl border border-gray-200">

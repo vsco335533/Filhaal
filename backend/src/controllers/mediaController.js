@@ -8,7 +8,22 @@ import { pipeline } from "stream/promises";
 ===================================================== */
 export const uploadMedia = async (req, res) => {
   try {
-    const { title, post_id = null, youtube_url } = req.body;
+      const { title, post_id = null, youtube_url, description = null, image_category_id = null } = req.body;
+
+      // Keep both possible category fields separate:
+      const category_id = req.body.category_id ?? null; // legacy post category
+      const img_category_id = image_category_id ?? null; // image category (image_categories.id)
+
+      // DEBUG: surface helpful request info to server logs for diagnosing upload failures
+      try {
+        console.debug('Upload request:', {
+          user: req.user && { id: req.user.id, role: req.user.role },
+          body: { title, post_id, youtube_url, description, image_category_id },
+          hasFile: !!req.file,
+        });
+      } catch (e) {
+        console.debug('Upload request: (failed to stringify request info)', e?.message || e);
+      }
 
     // If a YouTube URL is provided, create a video record without file upload
     if (youtube_url) {
@@ -26,9 +41,9 @@ export const uploadMedia = async (req, res) => {
       const result = await query(
         `
         INSERT INTO media
-          (title, type, url, thumbnail_url, file_size, uploaded_by, post_id, status, public_id)
+          (title, type, url, thumbnail_url, file_size, uploaded_by, post_id, status, public_id, description, image_category_id)
         VALUES
-          ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+          ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
         RETURNING *
         `,
         [
@@ -41,6 +56,8 @@ export const uploadMedia = async (req, res) => {
           post_id,
           req.user.role === "super_admin" ? "approved" : "pending",
           null,
+          description,
+          img_category_id,
         ]
       );
 
@@ -97,13 +114,14 @@ export const uploadMedia = async (req, res) => {
     const result = await query(
       `
       INSERT INTO media
-        (title, type, url, thumbnail_url, file_size, uploaded_by, post_id, status, public_id)
+        (title, description, type, url, thumbnail_url, file_size, uploaded_by, post_id, status, public_id, image_category_id)
       VALUES
-        ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+        ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
       RETURNING *
       `,
       [
         titleToSave,
+        description,
         mediaType,
         uploadResult.secure_url,
         mediaType === "image" ? uploadResult.secure_url : null,
@@ -112,13 +130,16 @@ export const uploadMedia = async (req, res) => {
         post_id,
         req.user.role === "super_admin" ? "approved" : "pending",
         uploadResult.public_id || null,
+        img_category_id,
       ]
     );
 
     res.status(201).json(result.rows[0]);
   } catch (err) {
     console.error("Media upload error:", err);
-    res.status(500).json({ error: "Media upload failed" });
+    // In development it's useful to return the underlying error message so the frontend
+    // can show a clearer reason. This should be safe for local development.
+    res.status(500).json({ error: err?.message || "Media upload failed" });
   }
 };
 

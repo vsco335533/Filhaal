@@ -11,6 +11,7 @@ import { runMigrations } from './utils/migrationRunner.js';
 import authRoutes from './routes/authRoutes.js';
 import postRoutes from './routes/postRoutes.js';
 import categoryRoutes from './routes/categoryRoutes.js';
+import imageCategoryRoutes from './routes/imageCategoryRoutes.js';
 import mediaRoutes from './routes/mediaRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import contactRoutes from './routes/contactRoutes.js';
@@ -29,12 +30,24 @@ const PORT = process.env.PORT || 5000;
 
 
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 100,
-  message: 'Too many requests from this IP, please try again later'
+  windowMs: 15 * 60 * 1000,  // 15 minutes
+  max: 1000,  // Increased from 100 to 1000 to avoid blocking legitimate requests
+  message: 'Too many requests from this IP, please try again later',
+  skip: (req) => {
+    // Skip rate limiting for proxy endpoint (PDFs and other files)
+    return req.path.includes('/api/debates/proxy') || req.path.includes('/api/media');
+  }
 });
 
-app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      frameSrc: ["'self'", "http://localhost:5173", "http://localhost:5174", "http://localhost:5175"],
+      frameAncestors: ["'self'", "http://localhost:5173", "http://localhost:5174", "http://localhost:5175"]
+    }
+  }
+}));
 app.use(cors({
   origin: process.env.FRONTEND_URL || 'http://localhost:5173',
   credentials: true
@@ -55,6 +68,7 @@ app.get('/api/health', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/posts', postRoutes);
 app.use('/api', categoryRoutes);
+app.use('/api', imageCategoryRoutes);
 app.use('/api/media', mediaRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/contact', contactRoutes);

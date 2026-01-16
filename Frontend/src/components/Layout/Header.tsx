@@ -10,7 +10,7 @@ const categories = [
   "Membership",
   // "issues"
 
-];
+];  
 
 export function Header() {
   const { user, profile, signOut } = useAuth();
@@ -41,12 +41,12 @@ export function Header() {
       {/* Top black nav */}
       <div className="bg-black text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-10 text-sm">
+          <div className="flex itechatms-center justify-between h-10 text-sm">
             <div className="flex items-center gap-6">
               <Link to="/" className="hover:underline">Home</Link>
               <Link to="/about" className="hover:underline">About</Link>
               <Link to="/donations" className="hover:underline">Donations</Link>
-              <Link to="/letter-to-editor" className="hover:underline">Write in Filhaal</Link>
+              <Link to="/write-in-filhaal" className="hover:underline">Write in Filhaal</Link>
               <Link to="/contact" className="hover:underline">Contact</Link>
               {/* <Link to="/issues" className="hover:underline">contants</Link> */}
             </div>
@@ -70,7 +70,7 @@ export function Header() {
                   >
                     <MoreVertical size={16} />
                   </button>
-
+                  
                   {menuOpen && (
                     <div ref={menuRef} className="absolute right-0 mt-2 w-44 bg-gray-700 border rounded shadow-lg z-40">
                       <Link to="/dashboard" onClick={() => setMenuOpen(false)} className="block px-4 py-2 hover:bg-black-50">Dashboard</Link>
@@ -96,14 +96,14 @@ export function Header() {
 
       {/* Category tabs like magazine — also include Research, Videos, Images */}
       <div className="bg-black rounded shadow-inner">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">  
           <div className="flex items-center gap-4 overflow-x-auto py-3">
             {categories.map((cat) => {
               const key = cat;
               const lower = cat.toLowerCase();
               // Map specific legacy categories to internal routes
               const to = lower.includes("editor")
-                ? "/write-in-filhaal"
+                ? "/letter-to-editor"
                 : lower.includes("membership")
                 ? "/donations"
                 : lower.includes("currently")

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { apiGet } from "../lib/api";
 import { Link } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 
 interface DebateItem {
   id: string;
@@ -9,6 +10,7 @@ interface DebateItem {
 }
 
 export function Discussion() {
+  const { isAdmin } = useAuth();
   const [items, setItems] = useState<DebateItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -35,6 +37,14 @@ export function Discussion() {
       <p className="text-gray-700 mb-6">
         This page mirrors the debates list from the original Filhaal site.
       </p>
+
+      {isAdmin && (
+        <div className="mb-4">
+          <Link to="/debates/admin" className="inline-block bg-green-600 text-white px-3 py-1 rounded">
+            Upload Debate / Discussion
+          </Link>
+        </div>
+      )}
 
       {loading ? (
         <div>Loading...</div>
